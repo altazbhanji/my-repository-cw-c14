@@ -6,17 +6,17 @@ from flaskext.mysql import MySQL
 app = Flask(__name__)
 
 # This "/home/ec2-user/dbserver.endpoint" file has to be created from cloudformation template and it has RDS endpoint
-db_endpoint = open("/home/ec2-user/dbserver.endpoint", 'r', encoding='UTF-8') 
+#db_endpoint = open("/home/ec2-user/dbserver.endpoint", 'r', encoding='UTF-8') 
 
 # Configure mysql database
 
-app.config['MYSQL_DATABASE_HOST'] = db_endpoint.readline().strip()
-#app.config['MYSQL_DATABASE_HOST'] = 'altaz-phonebook-rds.cbanmzptkrzf.us-east-1.rds.amazonaws.com'
+#app.config['MYSQL_DATABASE_HOST'] = db_endpoint.readline().strip()
+app.config['MYSQL_DATABASE_HOST'] = 'altaz-phonebook-rds.cbanmzptkrzf.us-east-1.rds.amazonaws.com'
 app.config['MYSQL_DATABASE_USER'] = 'admin'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'Serdar_1'
 app.config['MYSQL_DATABASE_DB'] = 'clarusway_phonebook'
 app.config['MYSQL_DATABASE_PORT'] = 3306
-db_endpoint.close()
+#db_endpoint.close()
 mysql = MySQL()
 mysql.init_app(app) 
 connection = mysql.connect()
@@ -116,7 +116,7 @@ def find_records():
     if request.method == 'POST':
         keyword = request.form['username']
         persons_app = find_persons(keyword) 
-        return render_template('index.html', persons_html=persons_app, keyword=keyword, show_result=True, developer_name='Altaz')
+        return render_template('index.html', persons=persons_app, keyword=keyword, show_result=True, developer_name='Altaz')
     else:
         return render_template('index.html', show_result=False, developer_name='Altaz')
 
@@ -181,4 +181,4 @@ def delete_record():
 if __name__== '__main__':
     init_phonebook_db()
     # app.run(debug=True)
-    app.run(host='0.0.0.0', port=80) 
+    app.run(host='0.0.0.0', port=5000) 
